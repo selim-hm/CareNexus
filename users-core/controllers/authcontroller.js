@@ -117,14 +117,17 @@ exports.register = asyncHandler(async (req, res) => {
     }
 
     generateTokenAndSend(newUser, res, {
+      id: newUser._id,
+      role: newUser.role,
+      avatar: newUser.avatar,
+      documentation: data.role === "patient", // Patients are auto-verified in register logic above
       message: "Verification email sent successfully",
-      userId: newUser._id,
     });
 
     console.log(`register successfully ${data.username}`)
   } catch (error) {
     res.status(500).json({ error: error.message });
-    console.log(error.error.message)
+    console.log(error.message)
   }
 });
 
@@ -153,6 +156,10 @@ exports.verifyEmail = asyncHandler(async (req, res) => {
     await user.save();
 
     generateTokenAndSend(user, res, {
+      id: user._id,
+      role: user.role,
+      avatar: user.avatar,
+      documentation: user.documentation || false,
       message: "Email verified successfully!",
     });
 
@@ -161,7 +168,7 @@ exports.verifyEmail = asyncHandler(async (req, res) => {
     res
       .status(500)
       .json({ error: "Internal server error", details: error.message });
-    console.log(error.error.message)
+    console.log(error.message)
   }
 });
 
@@ -173,19 +180,25 @@ exports.verifyEmail = asyncHandler(async (req, res) => {
 exports.login = asyncHandler(async (req, res) => {
   try {
     const data = {
-      email: xss(req.body.email?.trim()),
-      password: xss(req.body.password),
-      phone: xss(req.body.phone),
-      fcmToken: xss(req.body.fcmToken),
+      email: req.body.email ? xss(req.body.email.trim()) : undefined,
+      password: req.body.password ? xss(req.body.password) : undefined,
+      phone: req.body.phone ? xss(req.body.phone) : undefined,
+      fcmToken: req.body.fcmToken ? xss(req.body.fcmToken) : undefined,
     };
 
     const { error } = validateLogin(data);
     if (error)
       return res.status(400).json({ error: formatAuthValidationErrors(error) });
 
-    const user = await User.findOne({
-      $or: [{ "email.address": data.email }, { phone: data.phone }],
-    });
+    const loginQuery = [];
+    if (data.email) loginQuery.push({ "email.address": data.email });
+    if (data.phone) loginQuery.push({ phone: data.phone });
+
+    if (loginQuery.length === 0) {
+      return res.status(400).json({ error: "Invalid email or phone!" });
+    }
+
+    const user = await User.findOne({ $or: loginQuery });
     if (!user)
       return res.status(400).json({ error: "Invalid email or password!" });
 
@@ -211,12 +224,17 @@ exports.login = asyncHandler(async (req, res) => {
       }
     }
 
-    generateTokenAndSend(userWithKYC, res, { id: user._id, avatar: user.avatar });
+    generateTokenAndSend(userWithKYC, res, {
+      id: user._id,
+      avatar: user.avatar,
+      role: user.role,
+      documentation: isDocVerified,
+    });
 
     console.log(`login successfully ${user.username}`)
   } catch (error) {
     res.status(500).json({ error: error.message });
-    console.log(error.error.message)
+    console.log(error.message)
   }
 });
 
@@ -251,6 +269,10 @@ exports.updateLocation = asyncHandler(async (req, res) => {
     if (!user) return res.status(404).json({ error: "User not found" });
 
     generateTokenAndSend(user, res, {
+      id: user._id,
+      role: user.role,
+      avatar: user.avatar,
+      documentation: user.documentation || false,
       message: "Location updated successfully",
     });
   } catch (error) {
@@ -280,6 +302,10 @@ exports.viledLogin = asyncHandler(async (req, res) => {
     }
 
     generateTokenAndSend(req.user, res, {
+      id: req.user._id,
+      role: req.user.role,
+      avatar: req.user.avatar,
+      documentation: req.user.documentation || false,
       message: `Welcome back ${req.user.username}`,
     });
 
@@ -288,7 +314,7 @@ exports.viledLogin = asyncHandler(async (req, res) => {
 
   } catch (error) {
     res.status(500).json({ error: error.message });
-    console.log(error.error.message)
+    console.log(error.message)
 
   }
 });
@@ -316,8 +342,43 @@ exports.logout = asyncHandler(async (req, res) => {
     console.log(`logout successfully ${req.user.username}`)
   } catch (error) {
     res.status(500).json({ error: error.message });
-    console.log(error.error.message)
+    console.log(error.message)
 
+  }
+});
+
+/**
+ * @desc    Change user password
+ * @route   POST /api/auth/changePassword
+ * @access  Private
+ */
+exports.changePassword = asyncHandler(async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+
+    if (!oldPassword || !newPassword) {
+      return res.status(400).json({ error: "Both old and new passwords are required" });
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: "Incorrect old password" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    res.status(200).json({ message: "Password changed successfully" });
+    console.log(`changePassword successfully for user ${user._id}`);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    console.log(error.message);
   }
 });
 

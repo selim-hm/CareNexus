@@ -7,6 +7,7 @@ const {
   logout,
   updateLocation,
   Refresh,
+  changePassword,
 } = require("../controllers/authcontroller");
 
 const {
@@ -26,6 +27,7 @@ router.post("/login", login);
 router.patch("/updateLocation", verifyToken, updateLocation);
 router.post("/viledLogin", verifyTokenUpPhoto, viledLogin);
 router.post("/logout", verifyTokenUpPhoto, logout);
+router.post("/changePassword", verifyToken, changePassword);
 
 // GCS Upload Signature for Document Verification
 router.post("/gcs/sign-upload", verifyTokenUpPhoto, async (req, res) => {

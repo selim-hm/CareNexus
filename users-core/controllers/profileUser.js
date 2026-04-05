@@ -6,7 +6,7 @@ const {
 const {
   validateProfileUpdate,
   formatValidationErrors: formatProfileValidationErrors,
-} = require("../validators/ProfileValidator");
+} = require("../validators/AuthValidator");
 const { getOrderModel } = require("../../models/users-core/order.models");
 const Order = getOrderModel();
 const { getUserModel } = require("../../models/users-core/users.models");
@@ -54,7 +54,7 @@ exports.getUserProfile = asyncHandler(async (req, res) => {
  */
 exports.getUserOrders = asyncHandler(async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const { page = 1, limit = 10, status = "completed" } = req.query;
     const skip = (page - 1) * limit;
 
@@ -76,7 +76,12 @@ exports.getUserOrders = asyncHandler(async (req, res) => {
 
     if (!orders || orders.length === 0) {
       console.log("No completed orders found");
-      return res.status(404).json({ message: "No completed orders found" });
+      return res.status(200).json({
+        total: 0,
+        currentPage: Number(page),
+        totalPages: 0,
+        orders: [],
+      });
     }
 
     console.log("Orders retrieved successfully");
@@ -122,7 +127,7 @@ exports.getPost = asyncHandler(async (req, res) => {
  */
 exports.getUserOrderById = asyncHandler(async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const orderId = req.params.id;
 
     const order = await Order.findOne({
@@ -266,6 +271,18 @@ exports.updateUserProfile = asyncHandler(async (req, res) => {
       gender: xss(req.body.gender),
     };
 
+    if (req.body.specialization !== undefined) {
+      data.specialization = xss(req.body.specialization);
+    }
+    
+    if (req.body.academicDegrees !== undefined) {
+      data.academicDegrees = req.body.academicDegrees; // Array of objects
+    }
+
+    if (req.body.coverPhoto !== undefined) {
+      data.coverPhoto = xss(req.body.coverPhoto);
+    }
+
     const { error } = validateProfileUpdate(data);
     if (error) {
       console.log("Validation error");
@@ -276,7 +293,7 @@ exports.updateUserProfile = asyncHandler(async (req, res) => {
     if (
       !(
         req.user &&
-        (req.user.id === req.params.id || req.user.role === "admin")
+        (req.user._id.toString() === req.params.id || req.user.role === "admin")
       )
     ) {
       console.log("Unauthorized to update profile");
@@ -291,11 +308,28 @@ exports.updateUserProfile = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      { $set: data },
-      { new: true },
-    ).select("-password -email");
+    let updatedUser;
+    try {
+      updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        { $set: data },
+        { new: true, runValidators: true },
+      ).select("-password -email");
+    } catch (dbError) {
+      if (dbError.code === 11000) {
+        const field = Object.keys(dbError.keyValue)[0];
+        return res.status(400).json({ 
+          message: `${field === 'phone' ? 'Phone number' : 'Field'} already exists.`,
+          error: dbError.message 
+        });
+      }
+      throw dbError; // rethrow to be caught by outer try-catch
+    }
+
+    if (!updatedUser) {
+      console.log("User not found during update");
+      return res.status(404).json({ message: "User not found" });
+    }
 
     console.log("Profile updated successfully");
 

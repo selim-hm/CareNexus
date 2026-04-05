@@ -1,4 +1,6 @@
 const { Comment, vildateComment } = require('../../models/plog/comment');
+const { getUserModel } = require('../../models/users-core/users.models');
+const User = getUserModel();
 const asyncHandler = require('express-async-handler');
 const xss = require("xss");
 
@@ -26,7 +28,7 @@ exports.createComment = asyncHandler(async (req, res) => {
         });
         await comment.save();
         // Populate بيانات المستخدم لكي تظهر التفاصيل مثل username وavatar
-        await comment.populate('user', '-password');
+        await comment.populate({ path: 'user', select: '-password', model: User });
         res.status(201).json(comment);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -42,7 +44,7 @@ exports.getAllCommentsForPost = asyncHandler(async (req, res) => {
     try {
         // جلب كل التعليقات الخاصة بالمنشور باستخدام req.params.id وترتيبها حسب تاريخ الإنشاء
         const allComments = await Comment.find({ post: req.params.id })
-            .populate('user', ['-password'])
+            .populate({ path: 'user', select: '-password', model: User })
             .sort('createdAt')
             .lean(); // تحويل المستندات إلى كائنات عادية للتعديل عليها
 
@@ -172,7 +174,7 @@ exports.unlikeComment = asyncHandler(async (req, res) => {
 
 exports.getAllComments = asyncHandler(async (req, res) => {
     try {
-        const comments = await Comment.find().populate("user", ["-password"]);
+        const comments = await Comment.find().populate({ path: "user", select: "-password", model: User });
         if (!comments) return res.status(404).json({ error: "Comments not found" });
         res.status(201).json(comments);
     } catch (error) {

@@ -19,6 +19,11 @@ const postUser = new mongoose.Schema({
         type: String,
         default: "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png"
     },
+    media: [{
+        url: String,
+        publicId: String,
+        resourceType: String
+    }],
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -30,6 +35,10 @@ const postUser = new mongoose.Schema({
         trim: true,
         minlength: 1,
         maxlength: 100,
+    },
+    allowComments: {
+        type: Boolean,
+        default: true
     },
     like: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -53,6 +62,7 @@ function vildateCreatePost(ojb) {
         title: Joi.string().min(1).max(200).required().trim(),
         description: Joi.string().min(1).required().trim(),
         category: Joi.string().required().trim(),
+        allowComments: Joi.boolean()
     });
     return schema.validate(ojb);
 
@@ -62,6 +72,7 @@ function vildateUpdatePost(ojb) {
         title: Joi.string().min(1).max(200).trim(),
         description: Joi.string().min(1).trim(),
         category: Joi.string().trim(),
+        allowComments: Joi.boolean()
     });
     return schema.validate(ojb);
 }

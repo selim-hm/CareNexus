@@ -1,5 +1,6 @@
 // SCSS Variables for CareNexus
 $primary-blue: #0088ff;
+$primary-dark: #0066cc;
 $secondary-blue: #e0f2ff;
 $white: #ffffff;
 $black: #000000;
@@ -10,3 +11,14 @@ $transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 $glass-bg: rgba(255, 255, 255, 0.25);
 $glass-border: rgba(255, 255, 255, 0.1);
 $shadow-premium: 0 10px 40px rgba(0, 0, 0, 0.1);
+
+// Font Families
+$font-primary: 'Alyamama', 'Marhey', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-arabic: 'Alyamama', 'Tajawal', 'Marhey', sans-serif;
+
+// Added for Chat and Reviews
+$primary-color: #0088ff;
+$text-gray: #6b7280;
+$border-radius-lg: 20px;
+$bg-gradient: linear-gradient(135deg, #0088ff 0%, #0066cc 100%);
+$danger-color: #ef4444;

@@ -1,0 +1,268 @@
+@use "sass:color";
+@use "../../../../scss/variables" as *;
+
+.order-details-view {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    overflow-y: auto;
+
+    .view-hero {
+        padding: 2rem;
+        border-bottom: 1px solid rgba($text-light, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(to right, rgba($primary-blue, 0.05), transparent);
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+
+            .mobile-back-btn {
+                display: none;
+                background: none;
+                border: none;
+                color: $primary-blue;
+                cursor: pointer;
+                padding: 0.5rem;
+                margin-left: -0.5rem;
+                
+                @media (max-width: 900px) {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+
+            .avatar-large {
+                width: 80px;
+                height: 80px;
+                border-radius: 16px;
+                background: $secondary-blue;
+                color: $primary-blue;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+
+            .profile-info {
+                h2 {
+                    margin: 0;
+                    font-size: 1.5rem;
+                    color: $text-dark;
+                }
+                .order-spec {
+                    margin: 0.25rem 0 0;
+                    color: $text-light;
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: 1rem;
+
+        button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: $primary-blue;
+            color: white;
+            border: none;
+            &:hover { background: color.adjust($primary-blue, $lightness: -5%); }
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid $primary-blue;
+            color: $primary-blue;
+            &:hover { background: rgba($primary-blue, 0.05); }
+        }
+
+        .btn-success {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            &:hover { background: color.adjust(#2ecc71, $lightness: -5%); }
+        }
+    }
+
+    .view-body {
+        padding: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1.5fr;
+        gap: 2rem;
+        flex: 1;
+
+        .info-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+
+            .info-section {
+                h3 {
+                    font-size: 1.1rem;
+                    color: $text-dark;
+                    margin-bottom: 1rem;
+                }
+
+                .details-grid {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    gap: 1.5rem;
+                }
+
+                .detail-item {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 1rem;
+                    color: $text-light;
+
+                    svg { color: $primary-blue; margin-top: 0.2rem; }
+
+                    label { display: block; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.2rem; }
+                    span { display: block; font-weight: 600; color: $text-dark; }
+                    .highlight { font-size: 1.1rem; color: #2ecc71; }
+                }
+
+                .location-info {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 1rem;
+                    color: $text-dark;
+                    font-weight: 500;
+                    svg { color: $primary-blue; }
+                }
+            }
+        }
+
+        .map-panel {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba($text-light, 0.1);
+            min-height: 400px;
+            box-shadow: $shadow-soft;
+        }
+    }
+
+    /* Empty State */
+    .order-details-empty {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $text-light;
+        text-align: center;
+
+        .empty-content {
+            max-width: 300px;
+            svg { opacity: 0.2; margin-bottom: 1.5rem; }
+            h3 { font-size: 1.3rem; margin-bottom: 0.5rem; color: $text-dark; }
+            p { font-size: 0.9rem; }
+        }
+    }
+}
+
+.order-details-view.rtl {
+    text-align: right;
+
+    .view-hero {
+        flex-direction: row-reverse;
+        .patient-profile {
+            flex-direction: row-reverse;
+            text-align: right;
+        }
+    }
+
+    .view-body {
+        grid-template-columns: 1.5fr 1fr; // Reversed on RTL looks better
+        
+        .info-main .info-section {
+            .detail-item {
+                flex-direction: row-reverse;
+                text-align: right;
+            }
+            .location-info {
+                flex-direction: row-reverse;
+                text-align: right;
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .order-details-view {
+        .view-body {
+            grid-template-columns: 1fr;
+            .map-panel { min-height: 300px; }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .order-details-view {
+        .view-hero {
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: center;
+            
+            .patient-profile {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-actions {
+                width: 100%;
+                button { flex: 1; }
+            }
+        }
+    }
+}
+
+/* Action Form in Popup */
+.action-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: $text-dark;
+        }
+
+        .form-input {
+            padding: 0.75rem;
+            border: 1px solid rgba($text-light, 0.2);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            &:focus { outline: none; border-color: $primary-blue; }
+        }
+    }
+}

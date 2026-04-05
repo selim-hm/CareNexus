@@ -78,3 +78,38 @@ exports.deleteComment = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getDoctorReviews = async (req, res) => {
+    try {
+        const doctorId = req.user._id || req.user.id;
+        const { getOrderModel } = require("../../models/users-core/order.models");
+        const Order = getOrderModel();
+
+        // 1. Find all orders where this doctor is the provider
+        const orders = await Order.find({ provider: doctorId }).select('_id');
+        const orderIds = orders.map(o => o._id);
+
+        // 2. Find all reviews for these orders
+        const reviews = await Review.find({ product: { $in: orderIds } })
+            .populate('user', 'username avatar email')
+            .populate('product', 'medicalServiceType title appointmentDate')
+            .sort({ createdAt: -1 });
+
+        // 3. Calculate metrics
+        const totalReviews = reviews.length;
+        const averageRating = totalReviews > 0 
+            ? (reviews.reduce((acc, r) => acc + r.rating, 0) / totalReviews).toFixed(1)
+            : 0;
+
+        res.status(200).json({
+            success: true,
+            reviews,
+            stats: {
+                totalReviews,
+                averageRating: Number(averageRating)
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};

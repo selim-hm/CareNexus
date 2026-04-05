@@ -19,11 +19,11 @@
         z-index: 1;
         // High-performance mesh gradient as a fallback
         background: radial-gradient(at 0% 0%, rgba($primary-blue, 0.1) 0, transparent 50%),
-                    radial-gradient(at 100% 0%, rgba($primary-blue, 0.2) 0, transparent 50%),
-                    radial-gradient(at 100% 100%, rgba($primary-blue, 0.1) 0, transparent 50%),
-                    radial-gradient(at 0% 100%, rgba($primary-blue, 0.2) 0, transparent 50%),
-                    $text-dark;
-        
+            radial-gradient(at 100% 0%, rgba($primary-blue, 0.2) 0, transparent 50%),
+            radial-gradient(at 100% 100%, rgba($primary-blue, 0.1) 0, transparent 50%),
+            radial-gradient(at 0% 100%, rgba($primary-blue, 0.2) 0, transparent 50%),
+            $text-dark;
+
         // Add an inline SVG grid pattern for a "tech" feel instantly
         &::before {
             content: '';
@@ -111,4 +111,4 @@
     .auth-visual {
         display: none;
     }
-}
+}

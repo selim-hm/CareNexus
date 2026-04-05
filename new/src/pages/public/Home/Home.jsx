@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Building2, Users, Heart, ShieldCheck, BarChart3, Cloud, FileText, Smartphone, Clock, Cpu, Star, ChevronLeft, ChevronRight, Play, Pause, MessageSquare, Send, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -8,7 +8,6 @@ const Slider = SliderModule.default || SliderModule;
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './Home.scss';
-import FAQ from '../FAQ/FAQ';
 import Contact from '../Contact/Contact';
 
 
@@ -66,7 +65,6 @@ const Home = () => {
 
                 <div className="container hero-grid">
                     <div className="hero-content">
-                        <div className="hero-badge">{t('welcome.description')}</div>
                         <h1 className="hero-title">{t('home.hero_title')}</h1>
                         <p className="hero-subtitle">{t('home.hero_subtitle')}</p>
                         <div className="hero-actions">
@@ -77,15 +75,14 @@ const Home = () => {
                     <div className="hero-visual">
                         <div className="image-stack">
                             <div className="stack-item main">
-                                <img src="/hero-medical.png" alt={t('home.hero_visual.doctor_alt')} loading="lazy" />
+                                <img src="/pngwing.com (2).png" alt={t('home.hero_visual.doctor_alt')} loading="lazy" />
                             </div>
-                            <div className="stack-item secondary">
-                                <img src="/medical-tech.png" alt={t('home.hero_visual.tech_alt')} loading="lazy" />
-                            </div>
+                            {/* 
                             <div className="floating-stat">
                                 <span className="stat-num">{t('home.hero_visual.accuracy_value')}</span>
                                 <span className="stat-label">{t('home.hero_visual.accuracy_rate')}</span>
                             </div>
+                            */}
                         </div>
                     </div>
                 </div>
@@ -103,6 +100,7 @@ const Home = () => {
                         transition={{ duration: 0.6 }}
                         viewport={{ once: true }}
                     >
+                        <div className="hero-badge">{t('welcome.description')}</div>
                         <h2 className="stats-title">
                             {t('home.stats.title_main')}
                             <span className="highlight">{t('home.stats.title_accent')}</span>
@@ -221,34 +219,34 @@ const Home = () => {
                         {typeof Slider === 'function' ? (
                             <Slider ref={sliderRef} {...sliderSettings}>
                                 {(Array.isArray(testimonials) ? testimonials : []).map((test) => {
-                                const name = t(`testimonials.${test.id}.name`, { defaultValue: '' });
-                                const initials = typeof name === 'string' && name.length > 0
-                                    ? name.split(' ').map(n => n[0]).join('').toUpperCase()
-                                    : '?';
+                                    const name = t(`testimonials.${test.id}.name`, { defaultValue: '' });
+                                    const initials = typeof name === 'string' && name.length > 0
+                                        ? name.split(' ').map(n => n[0]).join('').toUpperCase()
+                                        : '?';
 
-                                return (
-                                    <div key={test.id} className="testimonial-slide">
-                                        <div className="testimonial-card">
-                                            <div className="rating">
-                                                {[...Array(Number.isFinite(test.rating) ? test.rating : 5)].map((_, starI) => (
-                                                    <Star key={starI} size={16} fill="#f1c40f" color="#f1c40f" />
-                                                ))}
-                                            </div>
-                                            <p className="content">"{t(`testimonials.${test.id}.content`)}"</p>
-                                            <div className="author">
-                                                <div className="avatar">
-                                                    {initials}
+                                    return (
+                                        <div key={test.id} className="testimonial-slide">
+                                            <div className="testimonial-card">
+                                                <div className="rating">
+                                                    {[...Array(Number.isFinite(test.rating) ? test.rating : 5)].map((_, starI) => (
+                                                        <Star key={starI} size={16} fill="#f1c40f" color="#f1c40f" />
+                                                    ))}
                                                 </div>
-                                                <div className="info">
-                                                    <h4 className="name">{name}</h4>
-                                                    <p className="role">{t(`testimonials.${test.id}.role`)}</p>
-                                                    <p className="hospital">{t(`testimonials.${test.id}.hospital`)}</p>
+                                                <p className="content">"{t(`testimonials.${test.id}.content`)}"</p>
+                                                <div className="author">
+                                                    <div className="avatar">
+                                                        {initials}
+                                                    </div>
+                                                    <div className="info">
+                                                        <h4 className="name">{name}</h4>
+                                                        <p className="role">{t(`testimonials.${test.id}.role`)}</p>
+                                                        <p className="hospital">{t(`testimonials.${test.id}.hospital`)}</p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                );
-                            })}
+                                    );
+                                })}
                             </Slider>
                         ) : (
                             <div className="slider-fallback" style={{ textAlign: 'center', padding: '40px', background: '#fff', borderRadius: '20px' }}>
@@ -280,7 +278,6 @@ const Home = () => {
                 </div>
             </section>
 
-            <FAQ />
             <Contact />
 
 

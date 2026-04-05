@@ -29,21 +29,29 @@ const initializeApp = async () => {
     const reviewRoutes = require("./users-core/routes/reviewRoutes");
 
 
-
     var postsRoute = require('./plog-api/routes/postsRoute');
     var commentRoute = require('./plog-api/routes/commentRoute');
     var categoriesRouter = require('./plog-api/routes/categoriesRouter');
+    var adminRouter = require('./plog-api/routes/admin');
+
 
     const contractRouter = require('./E-commerce/routes/contractRoutes');
-    const knowledgeRouter = require('./knowledge-api/routes/knowledgeRoutes');
     const ecommerceChatRouter = require('./E-commerce/routes/chatRoutes');
+    const adminECommerceRouter = require('./E-commerce/routes/admin');
+    const ordersRouter = require('./E-commerce/routes/orders');
+    const productMerchantRouter = require('./E-commerce/routes/productMerchant');
+    const productUserRoutes = require('./E-commerce/routes/productUserRoutes');
+    const reviewECommerceRoutes = require('./E-commerce/routes/reviewRoutes');
+
+
+    const knowledgeRouter = require('./knowledge-api/routes/knowledgeRoutes');
 
 
     securityMiddleware(app);
 
 
-    app.use("/users", usersRouter);
-    app.use("/forget-password", forgetpassword);
+    app.use("/api/users", usersRouter);
+    app.use("/api/forget-password", forgetpassword);
     app.use("/api/user", profileRouter);
     app.use("/api/user/academic-degrees", academicDegreesRouter);
     app.use("/api/review", reviewRoutes);
@@ -51,13 +59,22 @@ const initializeApp = async () => {
     app.use("/api/chat", chatRouter);
 
 
-
     app.use("/api/posts", postsRoute);
     app.use("/api/comment", commentRoute);
     app.use("/api/categories", categoriesRouter);
+    app.use("/api/admin", adminRouter);
+
+
     app.use("/api/contracts", contractRouter);
-    app.use("/api/knowledge", knowledgeRouter);
     app.use("/api/ecommerce-chat", ecommerceChatRouter);
+    app.use("/api/admin-ecommerce", adminECommerceRouter);
+    app.use("/api/orders", ordersRouter);
+    app.use("/api/product-merchant", productMerchantRouter);
+    app.use("/api/product-user", productUserRoutes);
+    app.use("/api/review", reviewECommerceRoutes);
+
+
+    app.use("/api/knowledge", knowledgeRouter);
 
 
 

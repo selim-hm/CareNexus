@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || '/api', // Change '/api' if backend prefix differs
+    baseURL: import.meta.env.VITE_API_URL ||'/api', // Change '/api' if backend prefix differs
     timeout: 30000,
     withCredentials: true,
     headers: {
@@ -26,8 +26,11 @@ axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-            // Optional: Automatically handle unauthorized access
-            console.warn('Unauthorized request block caught by Axios Interceptor');
+            console.warn('Unauthorized request block caught by Axios Interceptor. Logging out...');
+            localStorage.removeItem('auth-token');
+            localStorage.removeItem('refresh-token');
+            localStorage.removeItem('auth-user');
+            window.location.href = '/login';
         }
         return Promise.reject(error);
     }

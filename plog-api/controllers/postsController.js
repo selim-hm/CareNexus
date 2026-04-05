@@ -1,4 +1,6 @@
 const { Post, vildateCreatePost, vildateUpdatePost, } = require('../../models/plog/post');
+const { getUserModel } = require('../../models/users-core/users.models');
+const User = getUserModel();
 const asyncHandler = require('express-async-handler');
 const cloudinary = require('../../config/cloudinary');
 const xss = require("xss")
@@ -14,46 +16,67 @@ const comment = require("../../models/plog/comment");
 
 exports.createPost = asyncHandler(async(req, res) => {
     try {
+        let parsedAllowComments = true;
+        if (req.body.allowComments !== undefined) {
+             parsedAllowComments = req.body.allowComments === 'true' || req.body.allowComments === true;
+        }
 
         const data = {
             title: xss(req.body.title),
             description: xss(req.body.description),
-            category: xss(req.body.category)
+            category: xss(req.body.category),
+            allowComments: parsedAllowComments
         }
 
         const { error } = vildateCreatePost(data);
         if (error) return res.status(400).json({ error: error.details[0].message });
 
-        const { title, description, category } = data;
-        let imageUrl = null;
+        const { title, description, category, allowComments } = data;
+        
+        let mediaArr = [];
+        let primaryImage = "https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_1280.png";
 
-        // ✅ التحقق إذا كان هناك صورة مرفوعة
-        if (req.file) {
+        // ✅ Handle multiple uploaded files
+        if (req.files && req.files.length > 0) {
             try {
-                const uploadPromise = new Promise((resolve, reject) => {
-                    const stream = cloudinary.uploader.upload_stream({ folder: 'posts' },
-                        (error, result) => {
-                            if (error) return reject(error);
-                            resolve(result.secure_url);
-                        }
-                    );
-                    stream.end(req.file.buffer); // مباشرة بدون حفظها في السيرفر
+                const uploadPromises = req.files.map(file => {
+                     return new Promise((resolve, reject) => {
+                         const stream = cloudinary.uploader.upload_stream(
+                             { folder: 'posts', resource_type: "auto" },
+                             (error, result) => {
+                                 if (error) return reject(error);
+                                 resolve({
+                                     url: result.secure_url,
+                                     publicId: result.public_id,
+                                     resourceType: result.resource_type
+                                 });
+                             }
+                         );
+                         stream.end(file.buffer);
+                     });
                 });
 
-                imageUrl = await uploadPromise;
+                mediaArr = await Promise.all(uploadPromises);
+                
+                // Set the first uploaded media as the primary image for backwards compatibility
+                if (mediaArr.length > 0 && mediaArr[0].url) {
+                    primaryImage = mediaArr[0].url;
+                }
             } catch (error) {
                 console.log("Cloudinary Upload Error:", error);
-                return res.status(500).json({ error: "Image upload failed, please try again." });
+                return res.status(500).json({ error: "Media upload failed, please try again." });
             }
         }
 
-        // ✅ إنشاء المنشور في قاعدة البيانات
+        // ✅ Create Post in Database
         const newPost = new Post({
             title,
             description,
             category,
+            allowComments,
             user: req.user.id,
-            image: imageUrl
+            image: primaryImage,
+            media: mediaArr
         });
 
         const post = await newPost.save();
@@ -88,7 +111,7 @@ exports.getAllPosts = asyncHandler(async(req, res) => {
             .skip((namPage - 1) * limit)
             .limit(limit)
             .sort('-createdAt')
-            .populate("user", ["-password"]);
+            .populate({ path: "user", select: "-password", model: User });
 
         if (!posts.length) {
             return res.status(404).json({ error: "Posts not found" });
@@ -120,7 +143,7 @@ exports.getAllPostsUser = asyncHandler(async(req, res) => {
         //req query params
 
 
-        const posts = await Post.find({ user: req.params.id }).populate("user", "-password -email").sort('-createdAt');
+        const posts = await Post.find({ user: req.params.id }).populate({ path: "user", select: "-password -email", model: User }).sort('-createdAt');
         if (!posts) return res.status(404).json({ error: "Post not found" });
         // console.log(posts);
         res.status(201).json(posts);
@@ -140,7 +163,7 @@ exports.getAllPostsUser = asyncHandler(async(req, res) => {
 exports.getPost = asyncHandler(async(req, res) => {
     try {
         const post = await Post.findById(req.params.id)
-            .populate("user", ["-password"])
+            .populate({ path: "user", select: "-password", model: User })
             .populate("comments");
         if (!post) return res.status(404).json({ error: "Post not found" });
         res.status(201).json(post);
@@ -185,12 +208,18 @@ exports.deletePost = asyncHandler(async(req, res) => {
  * */
 
 exports.updatePost = asyncHandler(async(req, res) => {
+        let parsedAllowComments = undefined;
+        if (req.body.allowComments !== undefined) {
+             parsedAllowComments = req.body.allowComments === 'true' || req.body.allowComments === true;
+        }
+
         const data = {
             title: xss(req.body.title),
             description: xss(req.body.description),
             category: xss(req.body.category)
-
         }
+        if (parsedAllowComments !== undefined) data.allowComments = parsedAllowComments;
+
         const { error } = vildateUpdatePost(data);
         if (error) return res.status(400).json({ error: error.details[0].message });
         const post = await Post.findById(req.params.id);
@@ -205,9 +234,12 @@ exports.updatePost = asyncHandler(async(req, res) => {
                 .json({ message: "access denied, you are not allowed" });
         }
 
+        const updateFields = { title: data.title, description: data.description, category: data.category };
+        if (parsedAllowComments !== undefined) updateFields.allowComments = data.allowComments;
+
         // 4. Update post
         const updatedPost = await Post.findByIdAndUpdate(
-            req.params.id, { $set: { title: data.title, description: data.description, category: data.category } }, { new: true }
+            req.params.id, { $set: updateFields }, { new: true }
         );
         res.json(post);
 
@@ -265,7 +297,7 @@ exports.updatePhotoPost = asyncHandler(async(req, res) => {
 exports.likePost = asyncHandler(async(req, res) => {
     try {
         const post = await Post.findByIdAndUpdate(req.params.id, { $addToSet: { like: req.user.id } }, { new: true })
-            .populate("user", ["-password"]);
+            .populate({ path: "user", select: "-password", model: User });
         if (!post) return res.status(404).json({ error: "Post not found" });
         res.json(post);
         console.log(post)
@@ -284,7 +316,7 @@ exports.likePost = asyncHandler(async(req, res) => {
 exports.unlikePost = asyncHandler(async(req, res) => {
     try {
         const post = await Post.findByIdAndUpdate(req.params.id, { $pull: { like: req.user.id } }, { new: true })
-            .populate("user", ["-password"]);
+            .populate({ path: "user", select: "-password", model: User });
         if (!post) return res.status(404).json({ error: "Post not found" });
         res.json(post);
     } catch (error) {
@@ -347,7 +379,7 @@ exports.unlikePost = asyncHandler(async(req, res) => {
 
 exports.getAllPostsAdmin = asyncHandler(async(req, res) => {
     try {
-        const posts = await Post.find().populate("user", ["-password"]);
+        const posts = await Post.find().populate({ path: "user", select: "-password", model: User });
         if (!posts) return res.status(404).json({ error: "Posts not found" });
         res.status(201).json(posts);
     } catch (error) {

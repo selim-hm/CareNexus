@@ -11,7 +11,12 @@
         "login": "Login",
         "dashboard": "Dashboard",
         "logout": "Logout",
-        "about": "About"
+        "orders": "My Orders",
+        "chat": "Messages",
+        "reviews": "Reviews",
+        "about": "About",
+        "feed": "Social Feed",
+        "settings": "Account Settings"
     },
     "titles": {
         "home": "Home",
@@ -29,7 +34,7 @@
         "not_found": "Page Not Found"
     },
     "home": {
-        "hero_title": "Your Health, Connected & Simplified",
+        "hero_title": "Your Health Connected , Simplified",
         "hero_subtitle": "Streamline patient care with our comprehensive healthcare platform. Connect doctors, patients, and pharmacies in one secure ecosystem.",
         "get_started": "Get Started",
         "learn_more": "Learn More",
@@ -62,7 +67,7 @@
         },
         "features": {
             "badge": "Enterprise-Grade Features",
-            "title_part1": "Built for",
+            "title_part1": "Built for ",
             "title_accent": "Healthcare",
             "title_part2": "Professionals",
             "subtitle": "Comprehensive healthcare management platform designed to meet the demanding requirements of modern healthcare organizations with enterprise-grade security and scalability.",
@@ -119,7 +124,7 @@
         },
         "hero_visual": {
             "accuracy_rate": "Accuracy Rate",
-            "accuracy_value": "99%",
+            "accuracy_value": "95%",
             "nexus_alt": "Nexus Background",
             "doctor_alt": "Doctor",
             "tech_alt": "Medical Technology"
@@ -135,19 +140,20 @@
         "team_title": "The Founding Team",
         "team_subtitle": "The Minds Behind CareNexus",
         "team_desc": "Six students, one vision. Meet the team that brought this project to life.",
+        "team_member_default_role": "Founding Member",
         "members": {
-            "m1_name": "Team Member 1",
-            "m1_role": "Full Stack Developer",
-            "m2_name": "Team Member 2",
-            "m2_role": "Backend Engineer",
-            "m3_name": "Team Member 3",
-            "m3_role": "UI/UX Designer",
-            "m4_name": "Team Member 4",
-            "m4_role": "AI Researcher",
-            "m5_name": "Team Member 5",
-            "m5_role": "Mobile Developer",
-            "m6_name": "Team Member 6",
-            "m6_role": "DevOps Specialist"
+             "m1_name": "abdallah mohamed afifi",
+            "m1_role": "",
+            "m2_name": "mohamed maher selim",
+            "m2_role": "",
+            "m3_name": "Shaima Mohamad Elgendy",
+            "m3_role": "",
+            "m4_name": "Ahmed Rifaat Nasef",
+            "m4_role": "",
+            "m5_name": "Naira Bashir Salam",
+            "m5_role": "",
+            "m6_name": "Omnia Awad El Deeb",
+            "m6_role": ""
         }
     },
     "support": {
@@ -263,6 +269,7 @@
         "gender_label": "Gender",
         "role_patient": "Patient",
         "role_doctor": "Doctor",
+        "role_nursing": "Nurse",
         "role_pharmacist": "Pharmacist",
         "gender_male": "Male",
         "gender_female": "Female",
@@ -277,58 +284,78 @@
     "common": {
         "count_is": "count is",
         "switch_lang": "العربية",
-        "back": "Back"
+        "back": "Back",
+        "welcome_back": "Welcome back, {{name}}",
+        "view_all": "View All",
+        "quick_actions": "Quick Actions",
+        "currency": "EGP",
+        "loading": "Loading...",
+        "show_all": "Show all",
+        "videos": "Videos",
+        "shared_success": "Shared successfully!",
+        "link_copied": "Link copied to clipboard!",
+        "share_failed": "Failed to share post",
+        "see_more": "(see more)",
+        "add_comment": "Add a comment...",
+        "reply": "Reply",
+        "post_details": "Post Details",
+        "write_reply": "Write a reply...",
+        "loading_comments": "Loading comments...",
+        "edit": "Edit",
+        "save_changes": "Save Changes",
+        "update_success": "Update successful!",
+        "update_error": "Update failed"
     },
     "testimonials": {
         "title": "What Our Users Say",
         "subtitle": "Join thousands of healthcare professionals who trust CareNexus to deliver exceptional patient care",
         "sarah": {
-            "name": "Dr. Sarah Johnson",
-            "role": "Cardiologist",
-            "hospital": "Metro General Hospital",
-            "content": "CareNexus has revolutionized how I manage my patients. The AI-powered insights help me make better diagnoses, and the seamless communication with pharmacists ensures my patients get the right medications quickly."
+            "name": "Dr. Ahmed Samy",
+            "role": "Internist",
+            "hospital": "Private Clinic",
+            "content": "The platform helped me monitor patients more accurately, especially those who need continuous follow-up."
         },
         "michael": {
-            "name": "Michael Chen",
-            "role": "Pharmacist",
-            "hospital": "HealthPlus Pharmacy",
-            "content": "The prescription management system is incredibly efficient. We've reduced processing time by 60% and eliminated prescription errors. The integration with doctors' systems is flawless."
+            "name": "Dr. Layla Elzahrany",
+            "role": "Pediatrician",
+            "hospital": "Al-Qasr Al-Aini Hospital",
+            "content": "As a pediatrician, what matters most to me is daily patient follow-up, and the platform provides a clear and easy way to track all details."
         },
         "emma": {
-            "name": "Emma Rodriguez",
-            "role": "Patient",
-            "hospital": "User since 2024",
-            "content": "As someone with chronic conditions, CareNexus has been a lifesaver. I never miss medications thanks to smart reminders, and I can easily track my health progress and communicate with my care team."
+            "name": "Mohamed Khalid",
+            "role": "Medical Laboratory Specialist",
+            "hospital": "Al Rawda Laboratory",
+            "content": "Linking lab results directly to patient monitoring is an excellent idea and made decision-making more accurate."
         },
         "john": {
-            "name": "John Williams",
-            "role": "Surgeon",
-            "hospital": "City Hospital",
-            "content": "The scheduling and patient management tools have significantly improved our workflow. Highly recommended for busy hospital environments."
+            "name": "Dr. Yosef Ali",
+            "role": "Clinical Nutritionist",
+            "hospital": "El Orman Hospital",
+            "content": "Daily follow-up helped me adjust nutrition plans based on accurate data."
         },
         "sophia": {
-            "name": "Sophia Patel",
-            "role": "Nurse",
-            "hospital": "Green Valley Clinic",
-            "content": "Real-time updates and patient monitoring make my job much easier. The interface is intuitive and easy to use."
+            "name": "Dr. Mahmoud Fouad",
+            "role": "Pharmacist",
+            "hospital": "Al-Azaby Pharmacy",
+            "content": "Displaying medication history this way reduced the risk of drug interactions and improved service quality."
         },
         "david": {
-            "name": "David Lee",
-            "role": "Orthopedic Specialist",
-            "hospital": "Sunrise Medical Center",
-            "content": "CareNexus integrates seamlessly with our existing systems. The analytics help in identifying patient trends effectively."
+            "name": "Ahmed Saeed",
+            "role": "Nurse",
+            "hospital": "Harmal Hospital",
+            "content": "Continuous alerts made patient follow-up easier and faster."
         },
         "olivia": {
-            "name": "Olivia Brown",
-            "role": "General Practitioner",
-            "hospital": "Community Health Hub",
-            "content": "The mobile app is a game-changer. I can check patient records and respond to messages even when I'm out of the clinic."
+            "name": "Mona Ali",
+            "role": "Patient",
+            "hospital": "Anemic Patient",
+            "content": "The platform helped me track my hemoglobin levels regularly, and sticking to treatment became easier thanks to the reminders."
         },
         "james": {
-            "name": "James Anderson",
-            "role": "Physician",
-            "hospital": "Central Health",
-            "content": "Customer support is responsive and helpful. The software is reliable and easy to adopt."
+            "name": "Karem Hassan",
+            "role": "Patient",
+            "hospital": "Hypertension Patient",
+            "content": "I felt there was real follow-up on my condition, and the alerts helped me stay committed to daily blood pressure checks and medication."
         }
     },
     "contact": {
@@ -571,14 +598,149 @@
         "how": {
             "title": "How CareNexus Works",
             "sub": "A seamless flow from patient request to service completion",
-            "s1": { "title": "Verify & Register", "desc": "Users register with KYC — face scan, document OCR, and identity check for medical providers." },
-            "s2": { "title": "Find Nearby Care", "desc": "Patients post service requests. The system geo-matches nearby qualified providers in real time." },
-            "s3": { "title": "Confirm & Serve", "desc": "Provider accepts, patient selects, and the service begins with real-time tracking and chat." },
-            "s4": { "title": "Complete & Review", "desc": "Both sides confirm completion. Commission is calculated, and the provider can be reviewed." }
+            "s1": {
+                "title": "Verify & Register",
+                "desc": "Users register with KYC — face scan, document OCR, and identity check for medical providers."
+            },
+            "s2": {
+                "title": "Find Nearby Care",
+                "desc": "Patients post service requests. The system geo-matches nearby qualified providers in real time."
+            },
+            "s3": {
+                "title": "Confirm & Serve",
+                "desc": "Provider accepts, patient selects, and the service begins with real-time tracking and chat."
+            },
+            "s4": {
+                "title": "Complete & Review",
+                "desc": "Both sides confirm completion. Commission is calculated, and the provider can be reviewed."
+            }
         },
         "security": {
             "title": "Enterprise-Grade Security",
             "desc": "Every user is verified with AI-powered KYC — face detection, liveness checks, OCR document reading, and international ID format validation via AWS Rekognition and Google Vision API."
         }
+    },
+    "doctor": {
+        "orders_management": "Orders Management",
+        "manage_your_tasks": "Manage your tasks and nearby patient requests",
+        "actions": {
+            "accept_success": "Interest expressed successfully",
+            "confirm_success": "Order confirmed",
+            "start_success": "Service started",
+            "arrival_success": "Arrival marked",
+            "complete_success": "Service completed, thank you",
+            "cancel_success": "Order cancelled"
+        },
+        "confirm": {
+            "accept_title": "Confirm Interest",
+            "accept_desc": "Please specify your proposed price and a brief description of your service.",
+            "start_title": "Start Service",
+            "start_desc": "Are you sure you want to start the service now?",
+            "arrival_title": "Confirm Arrival",
+            "arrival_desc": "Confirm your arrival at the patient's location.",
+            "complete_title": "Complete Service",
+            "complete_desc": "Was the service completed successfully?"
+        },
+        "select_order_to_view": "Select an order to view details",
+        "select_order_desc": "Please pick one of the orders from the list to see the full details and location map.",
+        "order_info": "Order Information",
+        "requested_at": "Requested At",
+        "service_type": "Service Type",
+        "proposed_price": "Proposed Price",
+        "offer_description": "Offer Description",
+        "no_orders_found": "No orders found currently",
+        "check_later": "Check back later for new updates",
+        "start_service": "Start Service",
+        "mark_arrival": "Mark Arrival",
+        "mark_complete": "Mark Complete",
+        "tabs": {
+            "available": "Available",
+            "active": "My Active",
+            "history": "History"
+        },
+        "stats": {
+            "active_orders": "Active Orders",
+            "completed_orders": "Completed Orders",
+            "total_earnings": "Total Earnings",
+            "earnings": "Earnings"
+        },
+        "dashboard_intro": "Here is a quick overview of what is happening today.",
+        "recent_alerts": "Important Alerts",
+        "alerts": {
+            "active_task": "You have {{count}} tasks in progress.",
+            "all_clear": "All clear! No new alerts."
+        },
+        "profile_language": "Profile Language",
+        "contact_info": "Contact info",
+        "connections": "connections",
+        "about": "About",
+        "bio": "Bio / Professional Summary",
+        "no_bio_yet": "No bio provided yet. Add a short summary about your professional background.",
+        "professional_details": "Professional",
+        "specialty_placeholder": "Medical Professional",
+        "education": "Education",
+        "specialty": "Specialty",
+        "no_education_yet": "No academic degrees listed.",
+        "degree_bachelor": "Bachelor's Degree",
+        "degree_master": "Master's Degree",
+        "degree_phd": "PhD",
+        "degree_diploma": "Diploma",
+        "degree_associate": "Associate's Degree",
+        "degree_other": "Other Degree",
+        "degree": "Academic Degree",
+        "field": "Field of Study",
+        "institution": "Institution / University",
+        "graduation_year": "Graduation Year"
+    },
+    "order_status": {
+        "open": "Open",
+        "awaiting_provider_confirmation": "Awaiting Confirmation",
+        "confirmed": "Confirmed",
+        "rejected_by_provider": "Rejected",
+        "in_progress": "In Progress",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+    },
+    "medical_service": {
+        "doctor_visit": "Doctor Visit",
+        "nursing": "Nursing",
+        "pharmacy": "Pharmacy",
+        "emergency": "Emergency"
+    },
+    "errors": {
+        "failed_to_fetch_orders": "Failed to fetch orders. Please check your connection.",
+        "action_failed": "Action failed. Please try again later."
+    },
+    "posts": {
+        "activity": "Activity",
+        "start_post": "Start a post",
+        "start_post_placeholder": "Start a post...",
+        "likes": "Likes",
+        "comments_count": "Comments",
+        "like": "Like",
+        "comment": "Comment",
+        "share": "Share",
+        "write_comment": "Write a comment...",
+        "recent_tags": "Recent Tags",
+        "photo": "Photo",
+        "video": "Video",
+        "event": "Event",
+        "article": "Write article",
+        "sort_by": "Sort by",
+        "recent": "Recent",
+        "empty_feed": "No posts available yet.",
+        "empty_feed_hint": "Be the first to share something with the community!",
+        "trending_now": "Trending Now",
+        "no_posts_yet": "You haven't posted anything yet.",
+        "create_post": "Create a Post",
+        "post_button": "Post",
+        "select_category": "Select a Category",
+        "what_do_you_want_to_talk_about": "What do you want to talk about?",
+        "media_limit_reached": "You can only upload up to 5 files.",
+        "allow_comments": "Allow comments on this post",
+        "followers": "followers",
+        "posts": "Posts",
+        "comments": "Comments",
+        "videos": "Videos"
     }
 }

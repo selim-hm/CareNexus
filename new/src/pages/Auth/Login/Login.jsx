@@ -23,8 +23,8 @@ const Login = () => {
     // Handle incoming Redux server errors with toast
     useEffect(() => {
         if (error) {
-            const message = typeof error === 'string' 
-                ? error 
+            const message = typeof error === 'string'
+                ? error
                 : (Array.isArray(error) ? error[0]?.message : (error.message || JSON.stringify(error)));
             toast.error(message);
             dispatch(clearError());

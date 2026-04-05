@@ -5,6 +5,7 @@ const { verifyToken } = require("../../middlewares/verifytoken");
 router.use(verifyToken);
 
 router.post("/send", ChatController.sendMessage);
+router.get("/conversations", ChatController.getConversations);
 router.get("/messages/:userId", ChatController.getMessages);
 
 router.get("/rtc/config", ChatController.getRTCConfig);

@@ -275,6 +275,10 @@ const UserSchema = new Schema(
       default:
         "https://icon-library.com/images/avatar-icon-images/avatar-icon-images-4.jpg",
     },
+    coverPhoto: {
+      type: String,
+      default: null,
+    },
     Address: {
       type: String,
       required: true,

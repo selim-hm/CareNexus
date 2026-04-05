@@ -59,6 +59,7 @@ exports.getOrdersForProvider = asyncHandler(async (req, res) => {
               type: "Point",
               coordinates: [location.coordinates[0], location.coordinates[1]],
             },
+            key: "meetingPoint",
             distanceField: "distance",
             spherical: true,
             maxDistance: distance,
@@ -86,8 +87,9 @@ exports.getOrdersForProvider = asyncHandler(async (req, res) => {
     }
 
     if (!orders.length) {
-      return res.status(404).json({
+      return res.status(200).json({
         message: "There are no applications available in the geographic area.",
+        orders: []
       });
     }
 

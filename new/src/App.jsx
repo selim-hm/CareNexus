@@ -1,8 +1,11 @@
 import { useState, useEffect, lazy, Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Routes, Route, useLocation } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
 import './scss/global.scss'
 import Loader from './components/loader/Loader'
+import AuthInitializer from './components/common/AuthInitializer/AuthInitializer'
+
 const ScrollToTop = lazy(() => import('./hooks/ScrollToTop'))
 const GlobalAssistant = lazy(() => import('./components/common/GlobalAssistant/GlobalAssistant'))
 
@@ -12,7 +15,6 @@ const AuthRoutes = lazy(() => import('./pages/Auth/AuthRoutes'))
 
 // Role-Based Routes (Lazy Loaded)
 const DoctorRoute = lazy(() => import('./pages/Doctor/Route'))
-const NursingRoute = lazy(() => import('./pages/Nursing/Route'))
 const PatientRoute = lazy(() => import('./pages/Patient/Route'))
 const PharmacyRoute = lazy(() => import('./pages/Pharmacy/Route'))
 const AdminRoute = lazy(() => import('./pages/Admin/Route'))
@@ -28,7 +30,6 @@ function App() {
 
   // App initialization loader
   useEffect(() => {
-    // App initialization - No artificial delay to improve LCP
     setLoading(false)
   }, [])
 
@@ -55,48 +56,48 @@ function App() {
 
   return (
     <>
+      {/* Restores Redux auth state from localStorage on every page load */}
+      <AuthInitializer />
+      <Toaster position="top-center" reverseOrder={false} />
+
       <ScrollToTop />
       <main>
         <div className="main-wrapper">
           <Suspense fallback={<Loader loading={true} />}>
             <Routes>
-              {/* Auth routes */}
+              {/* Auth routes (Login, Register, etc.) */}
               <Route path="/auth/*" element={<AuthRoutes />} />
-              
-              {/* Centralized Public Routes */}
+
+              {/* Public Routes */}
               <Route path="/*" element={<PublicRoutes />} />
-              
+
               {/* Protected Role-Based Routes */}
-              <Route 
-                path="/doctor/*" 
-                element={<ProtectedRoute allowedRoles={['doctor']}><DoctorRoute /></ProtectedRoute>} 
+              <Route
+                path="/doctor/*"
+                element={<ProtectedRoute allowedRoles={['doctor', 'nursing']}><DoctorRoute /></ProtectedRoute>}
               />
-              <Route 
-                path="/nursing/*" 
-                element={<ProtectedRoute allowedRoles={['nursing']}><NursingRoute /></ProtectedRoute>} 
+              <Route
+                path="/patient/*"
+                element={<ProtectedRoute allowedRoles={['patient']}><PatientRoute /></ProtectedRoute>}
               />
-              <Route 
-                path="/patient/*" 
-                element={<ProtectedRoute allowedRoles={['patient']}><PatientRoute /></ProtectedRoute>} 
+              <Route
+                path="/pharmacy/*"
+                element={<ProtectedRoute allowedRoles={['pharmacy']}><PharmacyRoute /></ProtectedRoute>}
               />
-              <Route 
-                path="/pharmacy/*" 
-                element={<ProtectedRoute allowedRoles={['pharmacy']}><PharmacyRoute /></ProtectedRoute>} 
+              <Route
+                path="/admin/*"
+                element={<ProtectedRoute allowedRoles={['admin']}><AdminRoute /></ProtectedRoute>}
               />
-              <Route 
-                path="/admin/*" 
-                element={<ProtectedRoute allowedRoles={['admin']}><AdminRoute /></ProtectedRoute>} 
-              />
-              <Route 
-                path="/shipping-company/*" 
-                element={<ProtectedRoute allowedRoles={['shipping_company']}><ShippingCompanyRoute /></ProtectedRoute>} 
+              <Route
+                path="/shipping-company/*"
+                element={<ProtectedRoute allowedRoles={['shipping_company']}><ShippingCompanyRoute /></ProtectedRoute>}
               />
 
               {/* Catch-all 404 Route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
-          
+
           <Suspense fallback={null}>
             <GlobalAssistant />
           </Suspense>

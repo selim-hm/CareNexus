@@ -41,9 +41,9 @@ router.post("/cancel/:id", verifyToken, RemainingAccount, cancelOrderByPatient);
 
 // Provider Routes
 router.get("/getOrdersForProvider", verifyToken, RemainingAccount, getOrdersForProvider);
-router.post("/acceptOrder", verifyToken, RemainingAccount, acceptOrder);
-router.post("/confirmOrder", verifyToken, RemainingAccount, confirmOrder);
-router.post("/rejectOrder", verifyToken, RemainingAccount, rejectOrder);
+router.post("/acceptOrder/:id", verifyToken, RemainingAccount, acceptOrder);
+router.post("/confirmOrder/:id", verifyToken, RemainingAccount, confirmOrder);
+router.post("/rejectOrder/:id", verifyToken, RemainingAccount, rejectOrder);
 router.post("/start/:id", verifyToken, RemainingAccount, startService);
 router.patch("/markArrivalByProvider/:id", verifyToken, RemainingAccount, markArrivalByProvider);
 router.post("/complete/:id", verifyToken, RemainingAccount, completeOrderByProvider);

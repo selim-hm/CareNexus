@@ -2,11 +2,11 @@ var express = require('express');
 var router = express.Router();
 const postsController = require("../controllers/postsController");
 const { verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin, } = require('../../middlewares/verifytoken');
-const upload = require('../../middlewares/upload');
+const { upload } = require('../../middlewares/upload');
 const validateObjectId = require('../../middlewares/validateObjectId');
 //create a new post
 
-router.post('/:id', verifyTokenAndAuthorization, upload.single('image'), postsController.createPost);
+router.post('/:id', verifyTokenAndAuthorization, upload.array('media', 5), postsController.createPost);
 
 //get all posts
 
@@ -18,7 +18,7 @@ router.get('/post/:id', verifyToken, postsController.getPost);
  //delete post
 router.delete("/:id", verifyToken , postsController.deletePost);
 router.put("/:id",verifyToken, postsController.updatePost);
-router.put("/updatePhoto/:id", verifyToken, upload.single('image'), postsController.updatePhotoPost);
+router.put("/updatePhoto/:id", verifyToken, upload.array('media', 5), postsController.updatePhotoPost);
  //like post
 router.put("/:id/like",validateObjectId,  verifyToken, postsController.likePost);
 //unlike post
