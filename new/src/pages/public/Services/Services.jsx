@@ -115,7 +115,6 @@ const Services = () => {
         <div className="services-page">
             {/* ── Hero ── */}
             <section className="services-hero">
-                <div className="hero-glow" />
                 <div className="container">
                     <span className="hero-badge">{t('services.badge', 'Platform Services')}</span>
                     <h1>{t('services.hero.title', 'Everything Your Healthcare Journey Needs')}</h1>
@@ -128,6 +127,10 @@ const Services = () => {
                             </div>
                         ))}
                     </div>
+                </div>
+                <div className="bg-decor">
+                    <div className="blob blob-1"></div>
+                    <div className="blob blob-2"></div>
                 </div>
             </section>
 

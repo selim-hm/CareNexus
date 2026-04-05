@@ -107,10 +107,23 @@ const About = () => {
                     </div>
                     <div className="mission-visual">
                         <motion.div 
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                            animate={{ 
+                                rotate: 360,
+                                scale: [1, 1.05, 1, 1.08, 1], // Heartbeat pulse (double beat)
+                            }}
+                            transition={{ 
+                                rotate: { duration: 50, repeat: Infinity, ease: "linear" },
+                                scale: { 
+                                    duration: 2, 
+                                    repeat: Infinity, 
+                                    times: [0, 0.1, 0.2, 0.3, 1], // Timing to simulate heartbeat
+                                    ease: "easeInOut" 
+                                }
+                            }}
                             className="nexus-circle"
                         >
+                            <div className="pulse-ring pr-1"></div>
+                            <div className="pulse-ring pr-2"></div>
                             <Cpu size={40} className="node n1" />
                             <Globe size={40} className="node n2" />
                             <Heart size={40} className="node n3" />
