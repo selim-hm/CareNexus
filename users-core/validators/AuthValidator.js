@@ -101,8 +101,7 @@ const validateRegister = (data) => {
 // ✅ Validate user login
 const validateLogin = (data) => {
   const schema = Joi.object({
-    email: Joi.string().required().email().lowercase().messages({
-      "string.empty": "Email is required",
+    email: Joi.string().email().lowercase().messages({
       "string.email": "Email must be valid",
     }),
 
@@ -112,13 +111,14 @@ const validateLogin = (data) => {
     phone: Joi.string()
       .pattern(/^[0-9+\-\(\)\s]+$/)
       .max(20)
+      .allow('', null)
       .messages({
         "string.pattern.base": "Phone number format is invalid",
       }),
     fcmToken: Joi.string().optional().messages({
       "string.base": "FCM Token must be a string",
     }),
-  });
+  }).or('email', 'phone');
 
   return schema.validate(data, { abortEarly: false });
 };
@@ -132,13 +132,24 @@ const validateProfileUpdate = (data) => {
       .messages({
         "string.pattern.base": "Phone number format is invalid",
       }),
-    description: Joi.string().max(500).messages({
+    description: Joi.string().max(500).allow("").optional().messages({
       "string.max": "Description cannot exceed 500 characters",
+    }),
+    specialization: Joi.string().max(100).allow("").optional().messages({
+      "string.max": "Specialization cannot exceed 100 characters",
     }),
     gender: Joi.string().required().valid("male", "female", "other").messages({
       "any.only": "Gender must be one of: male, female, other",
       "any.required": "Gender is required",
     }),
+    academicDegrees: Joi.array().items(Joi.object({
+      degree: Joi.string().valid("bachelor", "master", "phd", "diploma", "associate", "other").required(),
+      field: Joi.string().required().allow(""),
+      institution: Joi.string().required().allow(""),
+      graduationYear: Joi.number().integer().min(1950).max(new Date().getFullYear()),
+      certificateImage: Joi.string().uri().allow(null, "")
+    })).optional(),
+    coverPhoto: Joi.string().uri().allow(null, "").optional()
   });
 
   return schema.validate(data, { abortEarly: false });

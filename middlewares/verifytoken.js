@@ -15,14 +15,14 @@ const verifyTokenUpPhoto = async (req, res, next) => {
   const encryptedToken = req.headers["auth-token"];
 
   if (!encryptedToken) {
-    return res.status(403).json({
+    return res.status(401).json({
       error: "Authentication required",
       code: "MISSING_TOKEN",
     });
   }
 
   try {
-    const decoded = verifyAndDecryptToken(encryptedToken);
+    const decoded = await verifyAndDecryptToken(encryptedToken);
 
     const User = getUserModel();
     const UserWallet = getUserWalletModel();
@@ -36,8 +36,8 @@ const verifyTokenUpPhoto = async (req, res, next) => {
       .lean();
 
     if (!user) {
-      return res.status(403).json({
-        error: "User not found",
+      return res.status(401).json({
+        error: "User not found or session expired",
         code: "USER_NOT_FOUND",
       });
     }

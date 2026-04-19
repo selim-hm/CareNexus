@@ -11,3 +11,5 @@ router.get("/Allcomments", verifyTokenAndAdmin, commentController.getAllComments
 
 
 router.post('/categoryadmin', verifyTokenAndAdmin, category.createCategory);
+
+module.exports = router;

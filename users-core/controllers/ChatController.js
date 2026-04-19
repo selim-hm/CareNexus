@@ -179,6 +179,64 @@ exports.getMessages = async (req, res) => {
 };
 
 /**
+ * @desc    Get user conversations list
+ * @route   GET /api/chat/conversations
+ * @access  Private
+ */
+exports.getConversations = async (req, res) => {
+  try {
+    const userId = req.user._id || req.user.id;
+
+    const chats = await Chat.find({
+        $or: [{ from: userId }, { to: userId }]
+    })
+    .sort({ createdAt: -1 })
+    .populate('from', 'username avatar role')
+    .populate('to', 'username avatar role')
+    .populate('orderId', 'serviceType medicalServiceType status');
+
+    const conversationsMap = new Map();
+
+    chats.forEach(chat => {
+        const isSender = chat.from._id.toString() === userId.toString();
+        const partner = isSender ? chat.to : chat.from;
+        
+        // Safety check if partner exists
+        if (!partner) return;
+        
+        const partnerId = partner._id.toString();
+
+        if (!conversationsMap.has(partnerId)) {
+            conversationsMap.set(partnerId, {
+                partner,
+                lastMessage: chat.message,
+                lastMessageAt: chat.createdAt,
+                unreadCount: (!isSender && !chat.isRead) ? 1 : 0,
+                order: chat.orderId,
+                lastChatId: chat._id
+            });
+        } else {
+            const existing = conversationsMap.get(partnerId);
+            if (!isSender && !chat.isRead) {
+                existing.unreadCount += 1;
+            }
+        }
+    });
+
+    res.json({
+        success: true,
+        conversations: Array.from(conversationsMap.values())
+    });
+  } catch (error) {
+    console.log(`getConversations Error for user ${req.user._id}`, error);
+    res.status(500).json({
+      error: "Failed to fetch conversations",
+      code: "GET_CONVERSATIONS_ERROR"
+    });
+  }
+};
+
+/**
  * @desc    Get RTC configuration
  * @route   GET /api/chat/rtc/config
  * @access  Private

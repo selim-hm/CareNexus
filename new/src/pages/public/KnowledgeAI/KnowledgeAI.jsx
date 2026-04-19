@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchKnowledge } from '../stores/knowledgeService';
 import { addUserMessage, addAiMessage } from '../stores/knowledgeSlice';
+import { setHeaderTitle } from '../../Doctor/stores/doctorSlice';
 import './KnowledgeAI.scss';
 import { Send, Stethoscope } from 'lucide-react';
 
@@ -11,15 +12,25 @@ const KnowledgeAI = () => {
     const dispatch = useDispatch();
     const { chatHistory, isLoading } = useSelector((state) => state.knowledge);
     const [query, setQuery] = useState('');
-    const messagesEndRef = useRef(null);
+    const messagesAreaRef = useRef(null);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (messagesAreaRef.current) {
+            messagesAreaRef.current.scrollTo({
+                top: messagesAreaRef.current.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
     };
 
     useEffect(() => {
         scrollToBottom();
     }, [chatHistory]);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        dispatch(setHeaderTitle(t('nav.knowledge_ai', { defaultValue: 'Knowledge AI' })));
+    }, [dispatch, t]);
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -71,7 +82,7 @@ const KnowledgeAI = () => {
                     </div>
                 </div>
 
-                <div className="messages-area">
+                <div ref={messagesAreaRef} className="messages-area">
                     {chatHistory.map((msg) => (
                         <div key={msg.id} className={`message ${msg.sender}`}>
                             <div className="msg-bubble">
@@ -105,7 +116,6 @@ const KnowledgeAI = () => {
                             </div>
                         </div>
                     )}
-                    <div ref={messagesEndRef} />
                 </div>
 
                 <form className="chat-input-area" onSubmit={handleSearch}>

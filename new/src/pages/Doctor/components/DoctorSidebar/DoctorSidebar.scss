@@ -1,0 +1,184 @@
+@use "../../../../scss/variables" as *;
+
+.doctor-sidebar {
+    height: 100vh;
+    background: linear-gradient(180deg, #1a2a40 0%, #0d1a2b 100%);
+    color: $white;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 0.5rem;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+
+    &::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+    }
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    .sidebar-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1rem;
+        margin-bottom: 3rem;
+        height: 48px;
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: $white;
+            
+            span {
+                color: $primary-blue;
+            }
+        }
+
+        .collapse-btn {
+            background: rgba($white, 0.05);
+            border: 1px solid rgba($white, 0.1);
+            color: $white;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: $transition-smooth;
+
+            &:hover {
+                background: rgba($white, 0.15);
+                transform: scale(1.05);
+            }
+        }
+    }
+
+    .sidebar-nav {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0 0.5rem;
+        overflow-y: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            padding: 1rem;
+            border-radius: 12px;
+            color: rgba($white, 0.6);
+            text-decoration: none;
+            transition: $transition-smooth;
+            border: 1px solid transparent;
+
+            .nav-icon {
+                transition: transform 0.3s ease;
+                min-width: 24px;
+            }
+
+            .nav-label {
+                font-weight: 600;
+                font-size: 1rem;
+                white-space: nowrap;
+                opacity: 0.9;
+            }
+
+            &:hover {
+                background: rgba($white, 0.05);
+                color: $white;
+                
+                .nav-icon {
+                    transform: translateX(4px);
+                }
+            }
+
+            &.active {
+                background: rgba($primary-blue, 0.15);
+                color: $white;
+                border-color: rgba($primary-blue, 0.3);
+                
+                .nav-icon {
+                    color: $primary-blue;
+                }
+            }
+        }
+    }
+
+    .sidebar-footer {
+        padding: 1rem 0.5rem 0.5rem;
+        border-top: 1px solid rgba($white, 0.1);
+
+        .logout-btn {
+            width: 100%;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: #ff4d4d;
+            
+            &:hover {
+                background: rgba(#ff4d4d, 0.1);
+                color: #ff4d4d;
+            }
+        }
+    }
+
+    &.collapsed {
+        .sidebar-header {
+            justify-content: center;
+            padding: 0;
+            
+            .collapse-btn {
+                margin: 0;
+            }
+        }
+
+        .sidebar-nav {
+            align-items: center;
+            
+            .nav-item {
+                justify-content: center;
+                padding: 1rem;
+                width: 48px;
+                height: 48px;
+                
+                .nav-icon {
+                    margin: 0;
+                }
+                
+                &:hover .nav-icon {
+                    transform: scale(1.1);
+                }
+            }
+        }
+
+        .sidebar-footer .logout-btn {
+            justify-content: center;
+        }
+    }
+}
+
+[dir="rtl"] {
+    .doctor-sidebar {
+        .sidebar-nav .nav-item:hover .nav-icon {
+            transform: translateX(-4px);
+        }
+        
+        &.collapsed .sidebar-nav .nav-item:hover .nav-icon {
+            transform: scale(1.1);
+        }
+    }
+}

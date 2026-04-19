@@ -371,15 +371,20 @@ module.exports = (app) => {
       req.method !== "HEAD" &&
       req.method !== "OPTIONS"
     ) {
-      if (!contentType) {
-        securityLogger.suspicious("طلب بدون Content-Type", req);
+      // ⚠️ Use req.get() to safely check for header
+      const contentLength = req.get("Content-Length");
+      
+      // ✅ Only require Content-Type if there is actually a body to parse
+      // Many mobile/REST clients omit it for empty PUT/POST operations
+      if (!contentType && contentLength && contentLength !== "0") {
+        securityLogger.suspicious("طلب مع محتوى وبدون Content-Type", req);
         return res.status(400).json({
-          error: "مطلوب رأس Content-Type",
+          error: "مطلوب رأس Content-Type للطلبات التي تحتوي على بيانات",
           code: "CONTENT_TYPE_REQUIRED",
         });
       }
 
-      if (!allowedTypes.includes(contentType)) {
+      if (contentType && !allowedTypes.includes(contentType)) {
         securityLogger.suspicious(`نوع محتوى مرفوض: ${contentType}`, req);
         return res.status(415).json({
           error: "نوع المحتوى غير مدعوم",

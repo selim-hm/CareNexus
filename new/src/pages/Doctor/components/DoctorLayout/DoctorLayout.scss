@@ -1,0 +1,75 @@
+@use "../../../../scss/variables" as *;
+
+.doctor-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f4f7fa;
+    position: relative;
+
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(4px);
+        z-index: 950;
+        opacity: 0;
+        visibility: hidden;
+        transition: $transition-smooth;
+
+        &.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+
+    .sidebar-wrapper {
+        flex-shrink: 0;
+        z-index: 1000;
+        transition: $transition-smooth;
+    }
+
+    .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-width: 0; // Prevent content from overflowing flex container
+        transition: $transition-smooth;
+    }
+
+    .content-inner {
+        padding: 2rem;
+        flex: 1;
+
+        @media (max-width: 768px) {
+            padding: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            padding: 0.5rem;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .doctor-layout {
+        .sidebar-wrapper {
+            position: fixed;
+            left: -280px;
+            top: 0;
+            height: 100vh;
+
+            &.show-mobile {
+                left: 0;
+            }
+        }
+    }
+}
+
+[dir="rtl"] {
+    .doctor-layout {
+        flex-direction: row-reverse;
+    }
+}

@@ -1,0 +1,300 @@
+@use "../../../scss/variables" as *;
+
+.doctor-dashboard {
+    animation: dashboardFadeIn 0.8s ease-out;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+
+    .welcome-banner {
+        background: linear-gradient(135deg, $primary-blue 0%, $primary-dark 100%);
+        border-radius: 24px;
+        padding: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: $white;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba($primary-blue, 0.2);
+
+        .banner-content {
+            position: relative;
+            z-index: 2;
+            flex: 1;
+
+            .banner-greeting {
+                .date-badge {
+                    display: inline-block;
+                    padding: 6px 16px;
+                    background: rgba($white, 0.2);
+                    backdrop-filter: blur(10px);
+                    border-radius: 100px;
+                    font-size: 0.85rem;
+                    font-weight: 500;
+                    margin-bottom: 16px;
+                    text-transform: capitalize;
+                }
+
+                h1 {
+                    font-size: 2.5rem;
+                    font-weight: 700;
+                    margin-bottom: 8px;
+                    letter-spacing: -0.5px;
+                }
+
+                p {
+                    font-size: 1.1rem;
+                    opacity: 0.9;
+                    margin-bottom: 24px;
+                    max-width: 480px;
+                }
+
+                .banner-stats-preview {
+                    display: flex;
+                    align-items: center;
+                    gap: 24px;
+                    margin-bottom: 32px;
+
+                    .mini-stat {
+                        display: flex;
+                        flex-direction: column;
+                        
+                        .label {
+                            font-size: 0.8rem;
+                            opacity: 0.8;
+                            margin-bottom: 4px;
+                        }
+
+                        .value {
+                            font-size: 1.5rem;
+                            font-weight: 700;
+                        }
+                    }
+
+                    .divider {
+                        width: 1px;
+                        height: 32px;
+                        background: rgba($white, 0.2);
+                    }
+                }
+
+                .banner-cta {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    background: $white;
+                    color: $primary-blue;
+                    padding: 12px 24px;
+                    border-radius: 12px;
+                    font-weight: 600;
+                    border: none;
+                    cursor: pointer;
+                    transition: $transition-smooth;
+
+                    &:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+                        background: rgba($white, 0.9);
+                    }
+
+                    [dir='rtl'] & svg {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+        }
+
+        .banner-illustration {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 300px;
+
+            .circle-bg {
+                position: absolute;
+                width: 240px;
+                height: 240px;
+                background: rgba($white, 0.1);
+                border-radius: 50%;
+                filter: blur(40px);
+            }
+
+            .floating-icon {
+                color: rgba($white, 0.9);
+                filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
+                animation: float 6s ease-in-out infinite;
+            }
+        }
+
+        @media (max-width: 992px) {
+            flex-direction: column;
+            padding: 32px;
+            text-align: center;
+
+            .banner-content .banner-greeting {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                .banner-stats-preview {
+                    justify-content: center;
+                }
+            }
+
+            .banner-illustration {
+                display: none;
+            }
+        }
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .stat-card {
+        background: $white;
+        padding: 1.8rem;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        box-shadow: $shadow-soft;
+        transition: transform 0.3s ease;
+
+        &:hover { transform: translateY(-5px); }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        &.blue { .stat-icon { background: rgba($primary-blue, 0.1); color: $primary-blue; } }
+        &.green { .stat-icon { background: rgba(#10b981, 0.1); color: #10b981; } }
+        &.purple { .stat-icon { background: rgba(#8b5cf6, 0.1); color: #8b5cf6; } }
+
+        .stat-content {
+            .stat-label { color: $text-light; font-size: 0.9rem; font-weight: 500; }
+            .stat-value {
+                display: flex;
+                align-items: baseline;
+                gap: 4px;
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: $text-dark;
+                .suffix { font-size: 0.85rem; color: $text-light; }
+            }
+        }
+    }
+
+    .dashboard-content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2.5rem;
+
+        @media (max-width: 1200px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .recent-activity, .quick-actions {
+        background: $white;
+        border-radius: 24px;
+        padding: 24px;
+        box-shadow: $shadow-soft;
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            h3 { font-size: 1.25rem; color: $text-dark; }
+        }
+    }
+
+    .alerts-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .alert-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            border-radius: 16px;
+            align-items: flex-start;
+
+            &.primary { background: rgba($primary-blue, 0.05); color: $primary-blue; }
+            
+            .alert-body {
+                p { font-size: 0.95rem; color: $text-dark; margin-bottom: 8px; }
+                .text-link {
+                    background: none;
+                    border: none;
+                    color: $primary-blue;
+                    font-weight: 600;
+                    font-size: 0.85rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    cursor: pointer;
+                    padding: 0;
+                }
+            }
+        }
+
+        .empty-alerts {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 40px;
+            color: $text-light;
+            p { font-size: 1rem; }
+        }
+    }
+
+    .actions-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+
+        .action-tile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: rgba($text-light, 0.03);
+            border: 1px solid rgba($text-light, 0.1);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: $text-dark;
+
+            &:hover { background: rgba($text-light, 0.06); border-color: rgba($text-light, 0.2); }
+            span { font-weight: 600; }
+            
+            &.secondary { background: rgba(#8b5cf6, 0.03); color: #8b5cf6; border-color: rgba(#8b5cf6, 0.1); }
+            &.secondary:hover { background: rgba(#8b5cf6, 0.06); }
+        }
+    }
+}
+
+@keyframes dashboardFadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}

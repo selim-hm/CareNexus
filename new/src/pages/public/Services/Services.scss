@@ -17,48 +17,51 @@
 
 // ── Hero ─────────────────────────────────────────────
 .services-hero {
+    padding: 120px 0 120px;
     position: relative;
-    padding: 130px 0 80px;
-    background: linear-gradient(160deg, #0d1b4b 0%, #1a237e 60%, #283593 100%);
-    overflow: hidden;
     text-align: center;
+    color: $text-dark;
+    overflow: hidden;
+    background: transparent;
 
-    .hero-glow {
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(103, 126, 234, 0.4), transparent);
-        pointer-events: none;
-    }
+    .container {
+        position: relative;
+        z-index: 5;
+        max-width: 800px;
+        margin: 0 auto;
 
-    .hero-badge {
-        display: inline-block;
-        background: rgba(255, 255, 255, 0.12);
-        color: #a5b4fc;
-        border: 1px solid rgba(165, 180, 252, 0.3);
-        padding: 6px 18px;
-        border-radius: 50px;
-        font-size: 0.8rem;
-        font-weight: 700;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        margin-bottom: 24px;
-        backdrop-filter: blur(10px);
-    }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba($primary-blue, 0.15);
+            color: $primary-blue;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+            border: 1px solid rgba($primary-blue, 0.2);
+            backdrop-filter: blur(10px);
+        }
 
-    h1 {
-        font-size: clamp(2rem, 4vw, 3.2rem);
-        font-weight: 900;
-        color: #fff;
-        margin-bottom: 20px;
-        line-height: 1.2;
-    }
+        h1 {
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            font-weight: 950;
+            margin-bottom: 25px;
+            line-height: 1.1;
+            color: $text-dark;
+        }
 
-    > .container > p {
-        max-width: 700px;
-        margin: 0 auto 48px;
-        color: rgba(255, 255, 255, 0.72);
-        font-size: 1.1rem;
-        line-height: 1.7;
+        p {
+            max-width: 700px;
+            margin: 0 auto 48px;
+            color: rgba($text-dark, 0.6);
+            font-size: 1.3rem;
+            line-height: 1.6;
+        }
     }
 
     .stats-row {
@@ -69,8 +72,8 @@
     }
 
     .stat-pill {
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba($white, 0.6);
+        border: 1px solid rgba($primary-blue, 0.1);
         border-radius: 16px;
         padding: 16px 28px;
         display: flex;
@@ -79,23 +82,54 @@
         gap: 4px;
         backdrop-filter: blur(10px);
         transition: transform 0.2s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 
-        &:hover { transform: translateY(-4px); }
+        &:hover { 
+            transform: translateY(-4px); 
+            background: $white;
+            box-shadow: 0 8px 25px rgba($primary-blue, 0.1);
+        }
 
         .stat-value {
             font-size: 1.8rem;
             font-weight: 900;
-            background: linear-gradient(135deg, #a5b4fc, #67e8f9);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: $primary-blue;
         }
 
         .stat-label {
             font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.6);
+            color: $text-light;
             font-weight: 600;
             letter-spacing: 0.5px;
+        }
+    }
+
+    .bg-decor {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+        }
+
+        .blob-1 {
+            width: 600px;
+            height: 600px;
+            background: $primary-blue;
+            top: -200px;
+            right: -100px;
+        }
+
+        .blob-2 {
+            width: 500px;
+            height: 500px;
+            background: #4f46e5;
+            bottom: -150px;
+            left: -100px;
         }
     }
 }

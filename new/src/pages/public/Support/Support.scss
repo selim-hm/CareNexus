@@ -13,11 +13,12 @@
 
     [dir="rtl"] & {
         text-align: right;
-        
-        .learn-more svg, .quick-link-card svg:last-child {
+
+        .learn-more svg,
+        .quick-link-card svg:last-child {
             transform: rotate(180deg);
         }
-        
+
         .option-icon {
             margin-right: 0 !important;
             margin-left: 15px;
@@ -81,7 +82,10 @@
                     color: #64748b;
                     pointer-events: none;
 
-                    [dir='rtl'] & { left: auto; right: 20px; }
+                    [dir='rtl'] & {
+                        left: auto;
+                        right: 20px;
+                    }
                 }
 
                 .search-input {
@@ -96,7 +100,9 @@
                     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
                     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
-                    [dir='rtl'] & { padding: 0 52px 0 48px; }
+                    [dir='rtl'] & {
+                        padding: 0 52px 0 48px;
+                    }
 
                     &:focus {
                         outline: none;
@@ -122,9 +128,14 @@
                     color: #64748b;
                     transition: background 0.2s ease;
 
-                    [dir='rtl'] & { right: auto; left: 16px; }
+                    [dir='rtl'] & {
+                        right: auto;
+                        left: 16px;
+                    }
 
-                    &:hover { background: #cbd5e1; }
+                    &:hover {
+                        background: #cbd5e1;
+                    }
                 }
             }
 
@@ -132,7 +143,8 @@
             .search-results {
                 position: absolute;
                 top: calc(100% + 8px);
-                left: 0; right: 0;
+                left: 0;
+                right: 0;
                 background: $white;
                 border-radius: 16px;
                 box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
@@ -153,7 +165,9 @@
                 .result-item {
                     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 
-                    &:last-child { border-bottom: none; }
+                    &:last-child {
+                        border-bottom: none;
+                    }
                 }
 
                 .result-question {
@@ -172,7 +186,9 @@
                     color: $text-dark;
                     transition: background 0.18s ease;
 
-                    &:hover { background: #f8faff; }
+                    &:hover {
+                        background: #f8faff;
+                    }
 
                     .result-chevron {
                         flex-shrink: 0;
@@ -221,6 +237,10 @@
                 opacity: 0.3;
             }
 
+            @media (max-width: 768px) {
+                display: none; // Hide large circles causing overflow on mobile
+            }
+
             .circle-1 {
                 width: 400px;
                 height: 400px;
@@ -241,7 +261,7 @@
 
     .categories-section {
         padding: 80px 0;
-        
+
         .section-header {
             text-align: center;
             margin-bottom: 60px;
@@ -252,7 +272,7 @@
                 color: $text-dark;
                 margin-bottom: 15px;
             }
-            
+
             p {
                 color: $text-light;
                 font-size: 1.1rem;

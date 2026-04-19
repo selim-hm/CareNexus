@@ -78,8 +78,9 @@ const errorHandler = (err, req, res, next) => {
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>${statusCode} Error</title>
                     <style>
+                        @import url('https://fonts.googleapis.com/css2?family=Alyamama:wght@400;700&display=swap');
                         body { 
-                            font-family: Arial, sans-serif; 
+                            font-family: 'Alyamama', Arial, sans-serif; 
                             max-width: 800px; 
                             margin: 0 auto; 
                             padding: 20px; 
